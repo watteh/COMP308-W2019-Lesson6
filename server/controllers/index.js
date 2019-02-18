@@ -55,12 +55,23 @@ module.exports.displayLogin = (req, res, next) => {
     }
 }
 
-module.exports.processLogin = passport.authenticate('local', {
-    successRedirect: '/contact-list',
-    failureRedirect: '/login',
-    failureFlash: 'loginMessage',
-    failureMessage: 'Authentication Error'
-});
+module.exports.processLogin = (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            req.flash('loginMessage', 'Authentication Error');
+            return res.redirect('/login');
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            return res.redirect('/contact-list');
+        });
+    })(req, res, next);
+}
 
 module.exports.displayRegister = (req, res, next) => {
     if (!req.user) {
