@@ -11,7 +11,8 @@ module.exports.displayContactList = (req, res, next) => {
         } else {
             res.render('contacts/index', {
                 title: 'Contact List',
-                contactList: contactList
+                contactList: contactList,
+                displayName: req.user ? req.user.displayName : ''
             })
         }
     });
@@ -19,7 +20,8 @@ module.exports.displayContactList = (req, res, next) => {
 
 module.exports.displayAddPage = (req, res, next) => {
     res.render('contacts/add', {
-        title: 'Add Contact'
+        title: 'Add Contact',
+        displayName: req.user ? req.user.displayName : ''
     });
 }
 
@@ -51,7 +53,8 @@ module.exports.displayContact = (req, res, next) => {
             // show the edit view
             res.render('contacts/edit', {
                 title: 'Edit Contact',
-                contact: contactObject
+                contact: contactObject,
+                displayName: req.user ? req.user.displayName : ''
             });
         }
     });
